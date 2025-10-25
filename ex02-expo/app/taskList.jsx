@@ -3,7 +3,7 @@ import { CardTask } from "@/components/CardTask";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { FlatList, View } from "react-native";
-import { Button, Text, TextInput, Card } from "react-native-paper";
+import { Button, Text, TextInput, Card, Divider } from "react-native-paper";
 
 
 export default function TaskList() {
@@ -47,47 +47,90 @@ export default function TaskList() {
   }
   return (
     <View>
-      <Text style={{ fonteSize: 24, fontWeight: "bold" }}>Task List</Text>
-      <View style={{ flexDirection: "row" }}>
-         <TextInput
+      
+      
+      <Text >Lista de Tarefas</Text>
+      
+      <View >
+        <TextInput
+          
+          mode="outlined" 
           onChangeText={setDescription}
           value={description}
-          placeholder="Add a task"
-          textColor="#000000ff"
-          activeOutlineColor="#000000"
+          placeholder="Adicionar nova tarefa..."
+          textColor="#000000"
+          activeOutlineColor="#841584" 
         />
         <Button
-          onPress={() => addMutation.mutate({ description })}
+         
+          onPress={addMutation}
           rippleColor="#152084ff"
-          mode="contained-tonal"
+          mode="contained" // Mudança para 'contained' para mais destaque
           buttonColor="#841584" 
           textColor="#ffffff"
+          loading={isPending} // Exibe loading no botão durante a adição
+          disabled={!description.trim() || isPending}
         > 
-          Add
+          Adicionar
         </Button>
       </View>
-      <View
-        style={{
-          marginVertical: 5,
-          backgroundColor: "grey",
-          width: "90%",
-          height: 2,
-          alignSelf: "center",
-        }}
-      />
+      
+      
+      <Divider />
+      
+      {isPending && <ActivityIndicator animating={true} color="#841584" style={{ marginVertical: 10 }} />}
+      {data.length === 0 && !isPending && (
+          <Text >Nenhuma tarefa encontrada.</Text>
+      )}
+
+      {/* LISTA DE CARDS */}
       <FlatList
         data={data.results}
         keyExtractor={(item) => item.objectId}
+        contentContainerStyle={{ paddingBottom: 20 }}
+        
         renderItem={({ item: task }) => (
-          <CardTask
+
+          <Card 
             key={task.objectId}
-            task={task}
-            onDelete={deleteMutation.mutate}
-            onCheck={updateMutation.mutate}
-          />
+            
+            elevation={2}
+          >
+            <Card.Title 
+              
+              title={task.description || "Tarefa sem descrição"} 
+              subtitle={`ID: ${task.objectId}`}
+              titleStyle={{ textDecorationLine: task.isCompleted ? 'line-through' : 'none' }}
+
+              left={(props) => (
+                  <Button 
+                      {...props} 
+                      mode="text"
+                      icon={task.isCompleted ? "check-circle" : "circle-outline"}
+                     
+                      onPress={() => updateMutation.mutate({
+                          objectId: task.objectId, 
+                          isCompleted: !task.isCompleted // Inverte o estado
+                      })}
+                      
+                      textColor={task.isCompleted ? "#4CAF50" : "#9E9E9E"}
+                  />
+              )}
+              
+              right={(props) => (
+                  <Button 
+                      {...props} 
+                      icon="delete"
+                      mode="text"
+                      
+                      onPress={() => deleteMutation.mutate(task.objectId)} 
+                      textColor="#E57373" 
+                  />
+              )}
+            />
+          </Card>
         )}
       />
-      {isPending && <Text>Pending...</Text>}
     </View>
   );
 }
