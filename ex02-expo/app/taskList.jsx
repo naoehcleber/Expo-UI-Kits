@@ -2,7 +2,9 @@ import { addTask, deleteTask, getTasks, updateTask } from "@/api";
 import { CardTask } from "@/components/CardTask";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { Button, FlatList, Text, TextInput, View } from "react-native";
+import { FlatList, View } from "react-native";
+import { Button, Text, TextInput, Card } from "react-native-paper";
+
 
 export default function TaskList() {
   const [description, setDescription] = useState("");
@@ -47,15 +49,22 @@ export default function TaskList() {
     <View>
       <Text style={{ fonteSize: 24, fontWeight: "bold" }}>Task List</Text>
       <View style={{ flexDirection: "row" }}>
-        <TextInput
-          placeholder="Add a task"
-          value={description}
+         <TextInput
           onChangeText={setDescription}
+          value={description}
+          placeholder="Add a task"
+          textColor="#000000ff"
+          activeOutlineColor="#000000"
         />
         <Button
-          title="Add"
           onPress={() => addMutation.mutate({ description })}
-        />
+          rippleColor="#152084ff"
+          mode="contained-tonal"
+          buttonColor="#841584" 
+          textColor="#ffffff"
+        > 
+          Add
+        </Button>
       </View>
       <View
         style={{

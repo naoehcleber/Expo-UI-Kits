@@ -1,18 +1,18 @@
+import React from "react";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import {
   Alert,
-  Button,
   Image,
   Pressable,
   ScrollView,
   StyleSheet,
-  Text,
-  TextInput,
+  
   View,
 } from "react-native";
 // import { FlatListExample } from "@/components/FlatListExample";
 import { SectionListExample } from "@/components/SectionListExample";
+import { Button, Text, TextInput,  } from "react-native-paper";
 
 export default function Index() {
   const router = useRouter();
@@ -21,7 +21,7 @@ export default function Index() {
   const anoNasc = new Date().getFullYear() - parseInt(idade);
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Olá Turma!</Text>
+      <Text style={styles.title} variant="displayLarge">Olá Turma!</Text>
       <Image
         style={styles.avatar}
         source={require("@/assets/images/avatar.jpg")}
@@ -32,7 +32,7 @@ export default function Index() {
           setShowDetails(!showDetails);
         }}
       >
-        <Text numberOfLines={showDetails ? 0 : 1} style={styles.text}>
+        <Text variant="bodyMedium" numberOfLines={showDetails ? 0 : 1} style={styles.text}>
           Este é um App de exemplo da disciplina Programação Web e Mobile do
           Curso de Ciência da Computação da Universidade Católica de Pernambuco
           (semestre 2025.2)
@@ -45,25 +45,39 @@ export default function Index() {
         value={idade}
         placeholder="Qual a sua idade?"
         keyboardType="numeric"
+        textColor="#000000ff"
+        activeOutlineColor="#000000"
       />
       <View style={styles.buttonsContainer}>
+        <Button 
+          rippleColor="#152084ff"
+          mode="contained-tonal"
+          buttonColor="#841584" 
+          textColor="#ffffff"
+          onPress={() => console.log("Botão OK Pressionado")}
+        > 
+          OK 
+        </Button>
         <Button
-          onPress={() => Alert.alert("Botão OK pressionado")}
-          title="     OK     "
-          color="#841584"
-          accessibilityLabel="Learn more about this purple button"
-        />
-        <Button
+          rippleColor="#152084ff"
           onPress={() => Alert.alert("Botão Cancel pressionado")}
-          title="Cancel"
-          color="#841584"
-          accessibilityLabel="Learn more about this purple button"
-        />
+          mode="contained-tonal"
+          buttonColor="#841584" 
+          textColor="#ffffff"
+        >
+          Cancel
+        </Button>
       </View>
       <Button
-        title="Ir para Lista de Tarefas"
+        mode="contained-tonal"
+        rippleColor="#841584"
+
+        buttonColor="#152084ff" 
+        textColor="#ffffff"
         onPress={() => router.navigate("/taskList")}
-      />
+      >
+        Tasklist
+      </Button>
       <View style={styles.space} />
     </ScrollView>
   );
